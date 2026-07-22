@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#800000">
+  <meta name="robots" content="noindex, nofollow">
+  <title>MWS LensFlow</title>
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23800000'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%23D4AF37'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23fff'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --maroon: #800000;
+      --maroon-dark: #5b0000;
+      --gold: #d4af37;
+      --paper: #f8f6f1;
+      --text: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      position: relative;
+    }
+
+    #app-frame {
+      display: none;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #ffffff;
+    }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(128, 0, 0, 0.13), transparent 34%),
+        radial-gradient(circle at 90% 90%, rgba(212, 175, 55, 0.20), transparent 34%),
+        linear-gradient(135deg, #f8f6f1, #ffffff);
+    }
+
+    .card {
+      width: min(560px, 100%);
+      padding: 34px;
+      border: 1px solid rgba(255,255,255,0.85);
+      border-radius: 28px;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 24px 70px rgba(68, 31, 31, 0.14);
+      text-align: center;
+    }
+
+    .logo {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      background: linear-gradient(145deg, var(--maroon), var(--maroon-dark));
+      box-shadow: 0 14px 30px rgba(128,0,0,0.24);
+      color: var(--gold);
+      font-size: 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    h1 span {
+      color: var(--maroon);
+    }
+
+    p {
+      margin: 15px 0 0;
+      color: #5b6472;
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .loader {
+      width: 42px;
+      height: 42px;
+      margin: 28px auto 2px;
+      border: 4px solid rgba(128,0,0,0.14);
+      border-top-color: var(--maroon);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .button {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 17px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--maroon), var(--maroon-dark));
+      box-shadow: 0 10px 24px rgba(128,0,0,0.20);
+    }
+
+    .button-secondary {
+      color: var(--maroon);
+      background: #fff7e0;
+      border: 1px solid #ead18a;
+    }
+
+    .notice {
+      margin-top: 20px;
+      padding: 13px 15px;
+      border-radius: 13px;
+      border: 1px solid #f1d891;
+      background: #fff9e9;
+      color: #744f00;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .floating-open {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 15;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 13px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(128,0,0,0.92);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 640px) {
+      .screen {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 27px 21px;
+        border-radius: 22px;
+      }
+
+      .floating-open {
+        right: 10px;
+        bottom: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <iframe
+    id="app-frame"
+    title="MWS LensFlow"
+    allow="clipboard-read; clipboard-write; fullscreen"
+    allowfullscreen
+    referrerpolicy="strict-origin-when-cross-origin"
+  ></iframe>
+
+  <div id="loading-screen" class="screen">
+    <section class="card">
+      <div class="logo" aria-hidden="true">📷</div>
+      <h1>MWS <span>LensFlow</span></h1>
+      <p>Menghubungkan ke aplikasi media sekolah...</p>
+      <div class="loader" aria-label="Memuat"></div>
+    </section>
+  </div>
+
+  <div id="setup-screen" class="screen hidden">
+    <section class="card">
+      <div class="logo" aria-hidden="true">⚙️</div>
+      <h1>URL belum <span>diatur</span></h1>
+      <p>
+        Buka file <strong>index.html</strong>, lalu ganti nilai
+        <strong>APPS_SCRIPT_URL</strong> dengan URL deployment Google Apps Script
+        yang berakhiran <strong>/exec</strong>.
+      </p>
+      <div class="notice">
+        Contoh:<br>
+        <code>https://script.google.com/macros/s/AKfycb.../exec</code>
+      </div>
+    </section>
+  </div>
+
+  <div id="error-screen" class="screen hidden">
+    <section class="card">
+      <div class="logo" aria-hidden="true">!</div>
+      <h1>Aplikasi belum <span>terbuka</span></h1>
+      <p>
+        Kemungkinan akun Google belum login, akses domain ditolak, atau URL deployment
+        sudah berubah.
+      </p>
+      <div class="actions">
+        <button id="reload-button" class="button button-primary" type="button">
+          Muat ulang
+        </button>
+        <a id="direct-button" class="button button-secondary" href="#" target="_blank" rel="noopener noreferrer">
+          Login / buka langsung
+        </a>
+      </div>
+      <div class="notice">
+        Setelah login pada tab baru, kembali ke halaman ini lalu tekan
+        <strong>Muat ulang</strong>.
+      </div>
+    </section>
+  </div>
+
+  <a id="floating-open" class="floating-open" href="#" target="_blank" rel="noopener noreferrer">
+    ↗ Buka langsung
+  </a>
+
+  <script>
+    /*
+     * ============================================================
+     * GANTI HANYA BARIS INI DENGAN URL WEB APP YANG BERAKHIR /exec
+     * ============================================================
+     */
+    const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/millennia21.id/s/AKfycbzVY9TnYobjNvbbPK7NjbtzvbLQB_JK4Cjp9i2zgIRCFVCc8Q3NLCf_gZW8qfqbr4oNqg/exec';
+
+    (function () {
+      'use strict';
+
+      const frame = document.getElementById('app-frame');
+      const loadingScreen = document.getElementById('loading-screen');
+      const setupScreen = document.getElementById('setup-screen');
+      const errorScreen = document.getElementById('error-screen');
+      const reloadButton = document.getElementById('reload-button');
+      const directButton = document.getElementById('direct-button');
+      const floatingOpen = document.getElementById('floating-open');
+
+      let loadFinished = false;
+      let timeoutId = null;
+
+      function isValidAppsScriptUrl(value) {
+        try {
+          const url = new URL(String(value || '').trim());
+          return url.protocol === 'https:' &&
+            /(^|\.)script\.google\.com$/i.test(url.hostname) &&
+            (
+              /\/macros\/s\/[^/]+\/exec\/?$/i.test(url.pathname) ||
+              /\/a\/macros\/[^/]+\/s\/[^/]+\/exec\/?$/i.test(url.pathname)
+            );
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function show(element) {
+        element.classList.remove('hidden');
+      }
+
+      function hide(element) {
+        element.classList.add('hidden');
+      }
+
+      function openApp() {
+        if (!isValidAppsScriptUrl(APPS_SCRIPT_URL)) {
+          hide(loadingScreen);
+          show(setupScreen);
+          return;
+        }
+
+        directButton.href = APPS_SCRIPT_URL;
+        floatingOpen.href = APPS_SCRIPT_URL;
+
+        timeoutId = window.setTimeout(function () {
+          if (!loadFinished) {
+            hide(loadingScreen);
+            show(errorScreen);
+          }
+        }, 15000);
+
+        frame.addEventListener('load', function () {
+          loadFinished = true;
+          window.clearTimeout(timeoutId);
+
+          hide(loadingScreen);
+          hide(errorScreen);
+          frame.style.display = 'block';
+          floatingOpen.style.display = 'inline-flex';
+        }, { once: true });
+
+        frame.src = APPS_SCRIPT_URL;
+      }
+
+      reloadButton.addEventListener('click', function () {
+        window.location.reload();
+      });
+
+      openApp();
+    })();
+  </script>
+</body>
+</html>
