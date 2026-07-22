@@ -248,16 +248,7 @@
 
 <body>
   <div class="background"></div>
-
-  <iframe
-    id="app-frame"
-    title="MWS LensFlow"
-    allow="clipboard-read; clipboard-write; fullscreen"
-    allowfullscreen
-    referrerpolicy="strict-origin-when-cross-origin"
-  ></iframe>
-
-  <main id="login-gate" class="gate">
+<main id="login-gate" class="gate">
     <section class="card" aria-labelledby="page-title">
       <div class="logo" aria-hidden="true">📷</div>
 
@@ -289,9 +280,14 @@
           Login dengan Google
         </a>
 
-        <button id="open-app-button" class="button button-primary" type="button">
+        <a
+          id="open-app-button"
+          class="button button-primary"
+          href="https://script.google.com/a/macros/millennia21.id/s/AKfycbzVY9TnYobjNvbbPK7NjbtzvbLQB_JK4Cjp9i2zgIRCFVCc8Q3NLCf_gZW8qfqbr4oNqg/exec"
+          target="_self"
+        >
           Buka MWS LensFlow
-        </button>
+        </a>
       </div>
 
       <div id="loading-indicator" class="loading">
@@ -300,23 +296,11 @@
       </div>
 
       <p class="help">
-        Login Google dibuka di tab baru karena halaman autentikasi Google tidak dapat
-        ditampilkan langsung di dalam iframe.
+        Tombol Buka MWS LensFlow akan mengarahkan Anda langsung ke aplikasi Google Apps Script.
       </p>
     </section>
   </main>
-
-  <a
-    id="floating-open"
-    class="floating-open"
-    href="https://script.google.com/a/macros/millennia21.id/s/AKfycbzVY9TnYobjNvbbPK7NjbtzvbLQB_JK4Cjp9i2zgIRCFVCc8Q3NLCf_gZW8qfqbr4oNqg/exec"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    ↗ Buka langsung
-  </a>
-
-  <script>
+<script>
     const APPS_SCRIPT_URL = 'https://script.google.com/a/macros/millennia21.id/s/AKfycbzVY9TnYobjNvbbPK7NjbtzvbLQB_JK4Cjp9i2zgIRCFVCc8Q3NLCf_gZW8qfqbr4oNqg/exec';
 
     (function () {
